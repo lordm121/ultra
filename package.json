@@ -12,6 +12,9 @@
     ],
     "author": "@ニロ#3892",
     "license": "MIT",
+    "engines": {
+    "node": "14.x"
+  },
     "dependencies": {
         "@discordjs/opus": "^0.5.0",
         "aki-api": "^5.2.1",
