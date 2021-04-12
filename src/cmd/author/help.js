@@ -34,7 +34,7 @@ module.exports = {
             .addField('Welcome System 👋', '`set-welcome`')
             .addField('Games System 🎮', '`8ball`, `brand`, `capitals`, `coinflip`, `cut`, `emojis`, `fast`, `fkk`, `flags`, `fruits`, `hack`, `hug`, `kill`, `kiss`, `love`, `math`, `puzzle`, `sara7a`, `translate`, `trash`, `xo`, `drake`, `slap`, `points`, `games-leaderboard`, `triggered`, `bed`, `delete`, `egg`')
             .addField('Economy System 💰', '`credits`, `daily`, `profile`')
-            .addField('Music Sysyem 🎶', '`play`, `skip`, `stop`, `pause`, `resume`, `search`, `volume`, `nowplaying`, `queue`, `loop`')
+            .addField('Music Sysyem 🎶', '`play`, `skip`, `stop`, `pause`, `resume`, `search`, `volume`, `nowplaying`, `queue`, `loop`, `youtube`')
             .addField('Ticket System 🎫', '`new`, `add`, `remove`, `close`, `ticket-setup`')
             .setColor(client.build.colors.warn)
         return message.channel.send(embed)
