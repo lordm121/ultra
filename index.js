@@ -14,6 +14,7 @@ let cooldown = new Set()
 client.profile = new Enmap({ name: "profile", fetchAll: true })
 client.settings = new Enmap({ name: "settings", fetchAll: true })
 client.ticket = ticket = new Enmap({ name: "ticket", autoFetch: true, cloneLevel: "deep", fetchAll: true });
+const fetch = require("node-fetch");
 const db = require('quick.db');
 
 client.config = require("./config/bot.json")
@@ -1325,4 +1326,68 @@ process.on("unhandledRejection", (reason, promise) => {
 process.on("uncaughtException", err => {
   console.error(`Caught exception: ${err}`);
   process.exit(1);
+});
+
+const ACTIVITIES = {
+  "youtube": {
+    id: "755600276941176913", // don't touch this
+    name: "YouTube Together"
+  },
+
+};
+
+client.on("ready", () => console.log("Bot is online!"));
+client.on("warn", console.warn);
+client.on("error", console.error);
+
+client.on("message", async message => {
+  if (message.author.bot || !message.guild) return;
+  if (message.content.indexOf(client.config.bot.setting.main_prefix) !== 0) return;
+  const args = message.content.slice(client.config.bot.setting.main_prefix.length).trim().split(" ");
+  const cmd = args.shift().toLowerCase();
+  if (cmd === "youtube") {
+    const channel = message.member.voice.channel;
+    if (!channel || channel.type !== "voice") {
+      message.channel.send(
+        new MessageEmbed()
+          .setDescription('❌ | Please Join A Voice Channel First')
+          .setColor('RED'));
+      return;
+    }
+    if (!channel.permissionsFor(message.guild.me).has("CREATE_INSTANT_INVITE")) {
+      message.channel.send(new MessageEmbed()
+        .setDescription('❌ | I Can\' Make Invites Please Give Me "CREATE_INSTANT_INVITE" Permission')
+        .setColor('RED'));
+      return;
+    }
+    fetch(`https://discord.com/api/v8/channels/${channel.id}/invites`, {
+      method: "POST",
+      body: JSON.stringify({
+        max_age: 86400,
+        max_uses: 0,
+        target_application_id: "755600276941176913",
+        target_type: 2,
+        temporary: false,
+        validate: null
+      }),
+      headers: {
+        "Authorization": `Bot ${client.token}`,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(invite => {
+        if (invite.error || !invite.code) return message.channel.send(new MessageEmbed()
+          .setDescription('❌ | I Can\' Make Youtube Together')
+          .setColor('RED'));
+        var emi = new MessageEmbed()
+          .setTitle('Success')
+          .setDescription(`[Youtube](<https://discord.gg/${invite.code}>)`)
+          .setColor('GREEN')
+        message.channel.send(emi);
+      })
+      .catch(e => {
+        message.channel.send(eme);
+      })
+  }
 });
